@@ -9,7 +9,8 @@ class OrderController < ApplicationController
       end
     
       post '/orders' do 
-    
+        @order = Order.new(params)
+
         redirect to "orders/#{@order.id}"
       end
     

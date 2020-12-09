@@ -1,3 +1,3 @@
-class Server < ActiveRecord::Base[5.2]
+class Server < ActiveRecord::Base
 has_many :orders
 end
