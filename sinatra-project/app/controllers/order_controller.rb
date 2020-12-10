@@ -1,5 +1,5 @@
 class OrderController < ApplicationController
-    get '/orders' do
+      get '/orders' do
         @orders = order.all
         erb :'/orders/index' 
       end
@@ -10,7 +10,8 @@ class OrderController < ApplicationController
     
       post '/orders' do 
         @order = Order.new(params)
-
+        @order.server = @current_server
+        @order.save
         redirect to "orders/#{@order.id}"
       end
     
