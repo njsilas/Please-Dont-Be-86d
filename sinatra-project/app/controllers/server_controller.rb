@@ -1,22 +1,40 @@
 class ServerController < ApplicationController  
-  
-  
-  get '/log_in' do 
+  get '/logout' do
+    session.clear
+    redirect '/'
+  end
+  get '/log_in' do
+   if !is_logged_in?
+    erb  :'/servers/log_in'
+   else
+    redirect to '/servers/:id'
+   end
+ end
+  post '/log_in' do
+    server = Server.find_by_name(params[:name])
+    if server && server.authenticate(params[:password])
+      session[:server_id] = server.id
+      redirect to '/servers/:id'
+    else
+      redirect to '/log_in'
+    end
+  end
+  get '/servers/new' do 
     if !is_logged_in?
-      erb :'servers/log_in'
+      erb :'servers/new'
     else 
       redirect to '/servers/show'
     end
   end
-  post '/log_in' do
+  post '/servers/new' do
     server = Server.new(params)
     if server.password.blank? || server.name.blank?
-      redirect to '/log_in'
+      redirect to '/servers/new'
     else
        server.save
        session[:server_id] = server.id
       
-       redirect to 'servers/:id'
+       redirect to '/servers/:id'
     end
   end
     #get '/servers' do
@@ -24,13 +42,13 @@ class ServerController < ApplicationController
    # erb :'/servers/index' 
   #end
     
-  get '/servers/new' do 
-    if !is_logged_in?
-      erb :'/servers/new'
-    else
-      redirect to '/servers/show'
-    end
-  end
+  #get '/servers/new' do 
+  #  if !is_logged_in?
+      #erb :'/servers/new'
+   # else
+      #redirect to '/servers/show'
+    #end
+  #end
     
   #post '/servers' do
   #end
@@ -51,4 +69,5 @@ class ServerController < ApplicationController
   
   delete '/servers/:id' do
   end
+
 end

@@ -10,13 +10,13 @@ class OrderController < ApplicationController
     
       post '/orders' do 
         @order = Order.new(params)
-        @order.server = @current_server
+        @order.server_id = @current_server.id
         @order.save
-        redirect to "orders/#{@order.id}"
+        redirect to "/servers/#{@current_server.id}"
       end
     
       get '/orders/:id' do 
-        @order = order.find(params[:id])
+        @order = Order.find(params[:id])
         erb :'/orders/show'
       end
     
